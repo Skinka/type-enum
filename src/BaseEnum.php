@@ -62,7 +62,7 @@ abstract class BaseEnum
      * @param $name
      * @return mixed
      */
-    final public static function getByName($name)
+    private static function getByName($name)
     {
         $name  = (string) $name;
         $class = get_called_class();

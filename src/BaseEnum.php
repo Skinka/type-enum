@@ -8,11 +8,28 @@
 
 namespace skinka\php\TypeEnum;
 
+/**
+ * Class BaseEnum
+ * @package skinka\php\TypeEnum
+ */
 abstract class BaseEnum
 {
-    protected static $list = [];
+    /**
+     * @var array
+     */
+    protected static $data = [];
+    /**
+     * @var
+     */
     private $value;
+    /**
+     * @var
+     */
     private static $constants;
+    /**
+     * @var
+     */
+    private static $instances;
 
     /**
      * BaseEnum constructor.
@@ -23,21 +40,54 @@ abstract class BaseEnum
         $this->value = $value;
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
-        return $this->getName();
+        return (string)$this->value;
     }
 
-    final public function getName()
+    /**
+     * @param $method
+     * @param array $args
+     * @return self
+     */
+    final public static function __callStatic($method, array $args)
     {
-        return array_search($this->value, self::detectConstants(get_called_class()), true);
+        return self::getByName($method);
     }
 
+    /**
+     * @param $name
+     * @return mixed
+     */
+    final public static function getByName($name)
+    {
+        $name  = (string) $name;
+        $class = get_called_class();
+        if (isset(self::$instances[$class][$name])) {
+            return self::$instances[$class][$name];
+        }
+        $const = $class . '::' . $name;
+        if (!defined($const)) {
+            throw new \InvalidArgumentException($const . ' not defined');
+        }
+        return self::$instances[$class][$name] = new $class(constant($const));
+    }
+
+    /**
+     * @return mixed
+     */
     final public static function getConstants()
     {
         return self::detectConstants(get_called_class());
     }
 
+    /**
+     * @param $value
+     * @return bool
+     */
     final public static function has($value)
     {
         if ($value instanceof static && get_class($value) === get_called_class()) {
@@ -48,6 +98,10 @@ abstract class BaseEnum
         return in_array($value, $constants, true);
     }
 
+    /**
+     * @param $class
+     * @return mixed
+     */
     private static function detectConstants($class)
     {
         if (!isset(self::$constants[$class])) {
@@ -76,26 +130,36 @@ abstract class BaseEnum
         return self::$constants[$class];
     }
 
-    public static function getDropDown()
+    /**
+     * @param string $textFiled
+     * @return array
+     */
+    final public static function getDataList($textFiled = 'text')
     {
         $result = [];
-        foreach (static::$list as $key => $value) {
-            $result[$key] = $value['name'];
+        foreach (static::$data as $key => $value) {
+            $result[$key] = $value[$textFiled];
         }
         return $result;
     }
 
-    public static function getIn()
+    /**
+     * @return array
+     */
+    final public static function getArray()
     {
-        return array_keys(static::$list);
+        return array_keys(array_flip(self::getConstants()));
     }
 
-    public static function getStringValue($val)
+    /**
+     * @param string $name
+     * @param array $arguments
+     */
+    function __call($name, $arguments)
     {
-        if (static::has($val)) {
-            return static::$list[$val]['name'];
-        } else {
-            return '';
+        if (isset(static::$data[$this->value][$name])) {
+            return static::$data[$this->value][$name];
         }
+        throw new \InvalidArgumentException($name . ' not defined');
     }
 }

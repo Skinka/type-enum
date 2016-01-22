@@ -10,7 +10,7 @@ class Published extends BaseEnum
 
     protected static $data = [
         self::PUBLISHED => [
-            'text' => 'Опубликовано',
+            'text' => 'Published',
         ],
         self::UNPUBLISHED => [
             'text' => 'Un published',

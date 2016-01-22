@@ -62,7 +62,7 @@ abstract class BaseEnum
      * @param $name
      * @return mixed
      */
-    private static function getByName($name)
+    final public static function getByName($name)
     {
         $name  = (string) $name;
         $class = get_called_class();
@@ -74,6 +74,21 @@ abstract class BaseEnum
             throw new \InvalidArgumentException($const . ' not defined');
         }
         return self::$instances[$class][$name] = new $class(constant($const));
+    }
+
+    /**
+     * @param $value
+     * @return mixed
+     */
+    final public static function getByValue($value)
+    {
+        $class = get_called_class();
+        $constants = array_flip(self::getConstants());
+        if (isset($constants[$value])) {
+            return self::$instances[$class][$constants[$value]] = new $class($value);
+        } else {
+            throw new \InvalidArgumentException('"' . $value . '" not defined');
+        }
     }
 
     /**

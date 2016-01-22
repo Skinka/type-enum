@@ -1,0 +1,26 @@
+{
+  "name": "skinka/type-enum",
+  "type": "php-extension",
+  "description": "php base enum type",
+  "keywords": ["enum"],
+  "homepage": "http://github.com/skinka/type-enum",
+  "license": "MIT",
+  "support": {
+    "issues": "https://github.com/skinka/type-enum/issues",
+    "source": "https://github.com/skinka/type-enum"
+  },
+  "authors": [
+    {
+      "name": "Skinka",
+      "email": "skink@yandex.ru"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "skinka\\php\\TypeEnum\\": "src"
+    }
+  }
+}

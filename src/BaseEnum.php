@@ -168,8 +168,9 @@ abstract class BaseEnum
     }
 
     /**
-     * @param string $name
-     * @param array $arguments
+     * @param $name
+     * @param $arguments
+     * @return self
      */
     function __call($name, $arguments)
     {

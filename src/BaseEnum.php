@@ -131,6 +131,7 @@ abstract class BaseEnum
     }
 
     /**
+     * Return array data list
      * @param string $textFiled
      * @return array
      */

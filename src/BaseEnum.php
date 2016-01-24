@@ -66,14 +66,14 @@ abstract class BaseEnum
     {
         $name  = (string) $name;
         $class = get_called_class();
-        if (isset(static::$instances[$class][$name])) {
-            return static::$instances[$class][$name];
+        if (isset(self::$instances[$class][$name])) {
+            return self::$instances[$class][$name];
         }
         $const = $class . '::' . $name;
         if (!defined($const)) {
             throw new \InvalidArgumentException($const . ' not defined');
         }
-        return static::$instances[$class][$name] = new $class(constant($const));
+        return self::$instances[$class][$name] = new $class(constant($const));
     }
 
     /**
@@ -83,9 +83,9 @@ abstract class BaseEnum
     final public static function getByValue($value)
     {
         $class = get_called_class();
-        $constants = array_flip(static::getConstants());
+        $constants = array_flip(self::getConstants());
         if (isset($constants[$value])) {
-            return static::$instances[$class][$constants[$value]] = new $class($value);
+            return self::$instances[$class][$constants[$value]] = new $class($value);
         } else {
             throw new \InvalidArgumentException('"' . $value . '" not defined');
         }

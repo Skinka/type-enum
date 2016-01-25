@@ -30,10 +30,10 @@ class YesNo extends BaseEnum
 
     protected static $data = [
         self::YES => [
-            'text' => 'Да',
+            'text' => 'Yes',
         ],
         self::NO => [
-            'text' => 'Нет',
+            'text' => 'No',
         ]
     ];
 }

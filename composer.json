@@ -1,8 +1,8 @@
 {
   "name": "skinka/type-enum",
-  "type": "php-extension",
-  "description": "php base enum type",
-  "keywords": ["enum"],
+  "type": "library",
+  "description": "Simple and fast implementation of enumerations with native PHP 5.4 and upper",
+  "keywords": ["enum", "enumeration"],
   "homepage": "http://github.com/skinka/type-enum",
   "license": "MIT",
   "support": {

@@ -1,44 +1,52 @@
-# TypeEnum
+# PHP type Enum implementation
+It's an abstract class that needs to be extended to use  enumeration.
 
-#Create enum
+[What is an Enumeration?](https://en.wikipedia.org/wiki/Enumerated_type)
+#Install
+Add `skinka/type-enum` to the project's composer.json dependencies and run php composer.phar install
+
+#Usage
+##Create enum
 
 ```php
-class Published extends BaseEnum
+<?php
+
+namespace skinka\php\TypeEnum\enums;
+
+use skinka\php\TypeEnum\BaseEnum;
+
+/**
+ * Class to enumerations of YES or NO status
+ *
+ * @method static YesNo YES()
+ * @method static YesNo NO()
+ * @method string text()
+ */
+
+class YesNo extends BaseEnum
 {
-    const PUBLISHED = 1;
-    const UNPUBLISHED = 0;
+    const YES = 1;
+    const NO = 0;
 
     protected static $data = [
-        self::PUBLISHED => [
-            'text' => 'Published',
+        self::YES => [
+            'text' => 'Да',
         ],
-        self::UNPUBLISHED => [
-            'text' => 'Un published',
+        self::NO => [
+            'text' => 'Нет',
         ]
     ];
 }
 ```
 
-#Example
+##Use enum example
 
 ```php
-Published::getDataList();
+YesNo::getDataList(); //[0 => 'Un published', 1 => 'Published']
 
-[
-    0 => 'Un published',
-    1 => 'Published'
-]
+YesNo::getArray(); //[0,1]
 
-Published::getArray();
+YesNo::YES()->text(); //Yes
 
-[0,1]
-
-Peblished::PUBLISHED()->text();
-
-Published
-
-TitleType::getByValue(0)->text();
-
-Un published
-
+YesNo::getByValue(0)->text(); //No
 ```

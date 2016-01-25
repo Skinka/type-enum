@@ -10,30 +10,47 @@ namespace skinka\php\TypeEnum;
 
 /**
  * Class BaseEnum
+ * Class to implement type of enumerations
+ *
  * @package skinka\php\TypeEnum
  */
 abstract class BaseEnum
 {
     /**
+     * The list enumerators is description constants
+     *[constant => ["dataField" => "description", ...], ...]
+     *
      * @var array
      */
     protected static $data = [];
+
     /**
-     * @var
+     * The selected enumerator value
+     *
+     * @var null|bool|int|float|string
      */
     private $value;
+
     /**
-     * @var
+     * Available constants class
+     * ["class" => ["name" => value, ...], ...]
+     *
+     * @var array
      */
     private static $constants;
+
     /**
-     * @var
+     * Ready instances
+     * ["class" => ["name" => instance, ...], ...]
+     *
+     * @var array
      */
     private static $instances;
 
     /**
      * BaseEnum constructor.
-     * @param $value
+     *
+     * @param null|bool|int|float|string $value The constant value of the enumerator
      */
     public function __construct($value)
     {
@@ -41,6 +58,8 @@ abstract class BaseEnum
     }
 
     /**
+     * Get the value of the enumerator
+     *
      * @return string
      */
     public function __toString()
@@ -49,9 +68,13 @@ abstract class BaseEnum
     }
 
     /**
-     * @param $method
-     * @param array $args
+     * Get an enumerator instance by the given constant name
+     *
+     * @param string $method The name of the enumerator (called as method)
+     * @param array $args There should be no arguments
      * @return static
+     * @throws \InvalidArgumentException On an invalid or unknown name
+     * @throws \LogicException Not unique constants value
      */
     final public static function __callStatic($method, array $args)
     {
@@ -59,12 +82,16 @@ abstract class BaseEnum
     }
 
     /**
-     * @param $name
+     * Get an enumerator instance by the constant name
+     *
+     * @param string $name The constant name
      * @return static
+     * @throws \InvalidArgumentException On an invalid or unknown name
+     * @throws \LogicException Not unique constants value
      */
     final public static function getByName($name)
     {
-        $name  = (string) $name;
+        $name = (string)$name;
         $class = get_called_class();
         if (isset(self::$instances[$class][$name])) {
             return self::$instances[$class][$name];
@@ -77,8 +104,12 @@ abstract class BaseEnum
     }
 
     /**
-     * @param $value
+     * Get an enumerator instance by the constant value
+     *
+     * @param null|bool|int|float|string $value The constant value
      * @return static
+     * @throws \InvalidArgumentException On an invalid or unknown name
+     * @throws \LogicException Not unique constants value
      */
     final public static function getByValue($value)
     {
@@ -92,7 +123,10 @@ abstract class BaseEnum
     }
 
     /**
+     * Get all available constants of the called class
+     *
      * @return array
+     * @throws \LogicException Not unique constants value
      */
     final public static function getConstants()
     {
@@ -100,8 +134,11 @@ abstract class BaseEnum
     }
 
     /**
-     * @param $value
+     * Is the given value part of this enumeration
+     *
+     * @param static|null|bool|int|float|string $value
      * @return bool
+     * @throws \LogicException Not unique constants value
      */
     final public static function has($value)
     {
@@ -114,26 +151,29 @@ abstract class BaseEnum
     }
 
     /**
-     * @param $class
+     * Detect all available constants by the given class
+     *
+     * @param string $class
      * @return array
+     * @throws \LogicException Not unique constants value
      */
     private static function detectConstants($class)
     {
         if (!isset(self::$constants[$class])) {
             $reflection = new \ReflectionClass($class);
             $constants = $reflection->getConstants();
-            $ambiguous = array();
+            $notUnique = [];
             foreach ($constants as $value) {
                 $names = array_keys($constants, $value, true);
                 if (count($names) > 1) {
-                    $ambiguous[var_export($value, true)] = $names;
+                    $notUnique[var_export($value, true)] = $names;
                 }
             }
-            if (!empty($ambiguous)) {
-                throw new \LogicException('All possible values needs to be unique. The following are ambiguous: ' . implode(', ',
+            if (!empty($notUnique)) {
+                throw new \LogicException('All possible values needs to be unique. The following are not unique: ' . implode(', ',
                         array_map(function ($names) use ($constants) {
                             return implode('/', $names) . '=' . var_export($constants[$names[0]], true);
-                        }, $ambiguous)));
+                        }, $notUnique)));
             }
             while (($reflection = $reflection->getParentClass()) && $reflection->name !== __CLASS__) {
                 $constants = $reflection->getConstants() + $constants;
@@ -144,24 +184,27 @@ abstract class BaseEnum
     }
 
     /**
-     * Return array data list [$key => $textField, $key => $textField, ...]
+     * Return array data list
+     * ["key" => "description", ...]
      *
-     * @param string $textFiled
+     * @param string $dataFiled Name dataField description
      * @return array
      */
-    final public static function getDataList($textFiled = 'text')
+    final public static function getDataList($dataFiled = 'text')
     {
         $result = [];
         foreach (static::$data as $key => $value) {
-            $result[$key] = $value[$textFiled];
+            $result[$key] = $value[$dataFiled];
         }
         return $result;
     }
 
     /**
-     * Return array values on constants [0, 1, ...]
+     * Return array values on constants
+     * [value, ...]
      *
      * @return array
+     * @throws \LogicException Not unique constants value
      */
     final public static function getArray()
     {
@@ -169,15 +212,18 @@ abstract class BaseEnum
     }
 
     /**
-     * @param $name
-     * @param $arguments
-     * @return static
+     * Get value on dataField selected instance
+     *
+     * @param string $name The name dataField
+     * @param array $arguments There should be no arguments
+     * @return string
+     * @throws \InvalidArgumentException On an invalid or unknown name
      */
     function __call($name, $arguments)
     {
         if (isset(static::$data[$this->value][$name])) {
             return static::$data[$this->value][$name];
         }
-        throw new \InvalidArgumentException($name . ' not defined');
+        throw new \InvalidArgumentException('"' . $name . '" not defined');
     }
 }

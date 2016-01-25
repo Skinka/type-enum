@@ -46,6 +46,8 @@ YesNo::getDataList(); //[0 => 'Un published', 1 => 'Published']
 
 YesNo::getArray(); //[0,1]
 
+YesNo::NO(); //0
+
 YesNo::YES()->text(); //Yes
 
 YesNo::getByValue(0)->text(); //No

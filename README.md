@@ -44,7 +44,7 @@ class YesNo extends BaseEnum
 ```php
 YesNo::getDataList(); //[0 => 'Un published', 1 => 'Published']
 
-YesNo::getArray(); //[0,1]
+YesNo::getKeys(); //[0,1]
 
 YesNo::NO(); //0
 

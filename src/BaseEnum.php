@@ -200,13 +200,13 @@ abstract class BaseEnum
     }
 
     /**
-     * Return array values on constants
+     * Return array keys on constants
      * [value, ...]
      *
      * @return array
      * @throws \LogicException Not unique constants value
      */
-    final public static function getArray()
+    final public static function getKeys()
     {
         return array_values(self::getConstants());
     }

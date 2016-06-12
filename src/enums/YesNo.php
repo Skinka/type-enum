@@ -22,12 +22,15 @@ class YesNo extends BaseEnum
     const YES = 1;
     const NO = 0;
 
-    protected static $data = [
-        self::YES => [
-            'text' => 'Yes',
-        ],
-        self::NO => [
-            'text' => 'No',
-        ]
-    ];
+    public static function getData()
+    {
+        return [
+            self::YES => [
+                'text' => 'Yes',
+            ],
+            self::NO => [
+                'text' => 'No',
+            ]
+        ];
+    }
 }

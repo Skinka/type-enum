@@ -214,6 +214,26 @@ abstract class BaseEnum
     }
 
     /**
+     * Returns the value of the current constant
+     *
+     * @return bool|float|int|null|string
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    /**
+     * Returns the array description value of the current constant
+     *
+     * @return array
+     */
+    public function getArray()
+    {
+        return static::getData()[$this->value];
+    }
+    
+    /**
      * Get value on dataField selected instance
      *
      * @param string $name The name dataField

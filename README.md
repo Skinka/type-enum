@@ -29,7 +29,7 @@ class YesNo extends BaseEnum
     const NO = 0;
 
     public static function getData() {
-        return= [
+        return [
             self::YES => [
                 'text' => 'Yes',
             ],
@@ -52,5 +52,11 @@ YesNo::NO(); //0
 
 YesNo::YES()->text(); //Yes
 
+YesNo::YES()->getValue(); //1
+
+YesNo::YES()->getArray(); //['text' => 'Yes']
+
 YesNo::getByValue(0)->text(); //No
+
+YesNo::getByName('YES'); //1
 ```

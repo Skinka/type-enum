@@ -23,16 +23,19 @@ class Published extends BaseEnum
     const PUBLISHED = 1;
     const UNPUBLISHED = 0;
 
-    protected static $data = [
-        self::PUBLISHED => [
-            'text' => 'Published',
-            'class' => 'label label-success label-sm',
-        ],
-        self::UNPUBLISHED => [
-            'text' => 'Un published',
-            'class' => 'label label-danger label-sm',
-        ]
-    ];
+    public static function getData()
+    {
+        return [
+            self::PUBLISHED => [
+                'text' => 'Published',
+                'class' => 'label label-success label-sm',
+            ],
+            self::UNPUBLISHED => [
+                'text' => 'Un published',
+                'class' => 'label label-danger label-sm',
+            ]
+        ];
+    }
 
     /**
      * Get html block published status from bootstrap style

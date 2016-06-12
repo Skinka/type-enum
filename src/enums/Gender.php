@@ -18,22 +18,24 @@ use skinka\php\TypeEnum\BaseEnum;
  * @method string lowerText()
  * @method string gender()
  */
-
 class Gender extends BaseEnum
 {
     const MALE = 1;
     const FEMALE = 2;
 
-    protected static $data = [
-        self::MALE => [
-            'text' => 'Male',
-            'lowerText' => 'male',
-            'gender' => 'Man',
-        ],
-        self::FEMALE => [
-            'text' => 'Female',
-            'lowerText' => 'female',
-            'gender' => 'Woman',
-        ]
-    ];
+    public static function getData()
+    {
+        return [
+            self::MALE => [
+                'text' => 'Male',
+                'lowerText' => 'male',
+                'gender' => 'Man',
+            ],
+            self::FEMALE => [
+                'text' => 'Female',
+                'lowerText' => 'female',
+                'gender' => 'Woman',
+            ]
+        ];
+    }
 }

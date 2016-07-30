@@ -95,14 +95,14 @@ abstract class BaseEnum
     {
         $name = (string)$name;
         $class = get_called_class();
-        if (isset(self::$instances[$class][$name])) {
-            return self::$instances[$class][$name];
+        if (isset(static::$instances[$class][$name])) {
+            return static::$instances[$class][$name];
         }
         $const = $class . '::' . $name;
         if (!defined($const)) {
             throw new \InvalidArgumentException($const . ' not defined');
         }
-        return self::$instances[$class][$name] = new $class(constant($const));
+        return static::$instances[$class][$name] = new $class(constant($const));
     }
 
     /**
@@ -116,9 +116,9 @@ abstract class BaseEnum
     public static function getByValue($value)
     {
         $class = get_called_class();
-        $constants = array_flip(self::getConstants());
+        $constants = array_flip(static::getConstants());
         if (isset($constants[$value])) {
-            return self::$instances[$class][$constants[$value]] = new $class($value);
+            return static::$instances[$class][$constants[$value]] = new $class($value);
         } else {
             throw new \InvalidArgumentException('"' . $value . '" not defined');
         }
@@ -132,7 +132,7 @@ abstract class BaseEnum
      */
     public static function getConstants()
     {
-        return self::detectConstants(get_called_class());
+        return static::detectConstants(get_called_class());
     }
 
     /**
@@ -148,7 +148,7 @@ abstract class BaseEnum
             return true;
         }
         $class = get_called_class();
-        $constants = self::detectConstants($class);
+        $constants = static::detectConstants($class);
         return in_array($value, $constants, true);
     }
 
@@ -161,7 +161,7 @@ abstract class BaseEnum
      */
     private static function detectConstants($class)
     {
-        if (!isset(self::$constants[$class])) {
+        if (!isset(static::$constants[$class])) {
             $reflection = new \ReflectionClass($class);
             $constants = $reflection->getConstants();
             $notUnique = [];
@@ -180,9 +180,9 @@ abstract class BaseEnum
             while (($reflection = $reflection->getParentClass()) && $reflection->name !== __CLASS__) {
                 $constants = $reflection->getConstants() + $constants;
             }
-            self::$constants[$class] = $constants;
+            static::$constants[$class] = $constants;
         }
-        return self::$constants[$class];
+        return static::$constants[$class];
     }
 
     /**
@@ -210,7 +210,7 @@ abstract class BaseEnum
      */
     public static function getKeys()
     {
-        return array_values(self::getConstants());
+        return array_values(static::getConstants());
     }
 
     /**
